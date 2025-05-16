@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Extension Icons</title>
+</head>
+<body>
+    <h1>Icon Generator</h1>
+    <canvas id="icon16" width="16" height="16"></canvas>
+    <canvas id="icon48" width="48" height="48"></canvas>
+    <canvas id="icon128" width="128" height="128"></canvas>
+    
+    <div>
+        <button id="downloadBtn">Download Icons</button>
+    </div>
+    
+    <script>
+        // Function to draw the icon
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            
+            // Background
+            ctx.fillStyle = '#4285F4';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Shield shape
+            ctx.fillStyle = '#FFFFFF';
+            const shieldWidth = size * 0.7;
+            const shieldHeight = size * 0.8;
+            const shieldX = (size - shieldWidth) / 2;
+            const shieldY = (size - shieldHeight) / 2;
+            
+            // Draw rounded shield
+            ctx.beginPath();
+            ctx.moveTo(shieldX, shieldY + shieldHeight * 0.2);
+            ctx.lineTo(shieldX, shieldY + shieldHeight * 0.6);
+            ctx.quadraticCurveTo(
+                shieldX + shieldWidth / 2, 
+                shieldY + shieldHeight * 1.2, 
+                shieldX + shieldWidth, 
+                shieldY + shieldHeight * 0.6
+            );
+            ctx.lineTo(shieldX + shieldWidth, shieldY + shieldHeight * 0.2);
+            ctx.quadraticCurveTo(
+                shieldX + shieldWidth / 2, 
+                shieldY - shieldHeight * 0.1, 
+                shieldX, 
+                shieldY + shieldHeight * 0.2
+            );
+            ctx.fill();
+            
+            // Checkmark
+            if (size >= 48) {
+                ctx.strokeStyle = '#4285F4';
+                ctx.lineWidth = size * 0.08;
+                ctx.beginPath();
+                ctx.moveTo(shieldX + shieldWidth * 0.3, shieldY + shieldHeight * 0.5);
+                ctx.lineTo(shieldX + shieldWidth * 0.45, shieldY + shieldHeight * 0.65);
+                ctx.lineTo(shieldX + shieldWidth * 0.7, shieldY + shieldHeight * 0.35);
+                ctx.stroke();
+            }
+        }
+        
+        // Draw icons
+        drawIcon(document.getElementById('icon16'), 16);
+        drawIcon(document.getElementById('icon48'), 48);
+        drawIcon(document.getElementById('icon128'), 128);
+        
+        // Download function
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const sizes = [16, 48, 128];
+            
+            sizes.forEach(size => {
+                const canvas = document.getElementById(`icon${size}`);
+                const link = document.createElement('a');
+                link.download = `icon${size}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+    </script>
+</body>
+</html>

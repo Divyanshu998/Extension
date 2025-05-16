@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard AI</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      width: 320px;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+    
+    .header {
+      background-color: #4285F4;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      border-bottom: 1px solid #3367d6;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    
+    .content {
+      padding: 15px;
+    }
+    
+    .status-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .status-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .status-safe {
+      background-color: #28a745;
+    }
+    
+    .status-suspicious {
+      background-color: #ffc107;
+      color: #212529;
+    }
+    
+    .status-dangerous {
+      background-color: #dc3545;
+    }
+    
+    .status-unknown {
+      background-color: #6c757d;
+    }
+    
+    .status-text {
+      font-weight: 500;
+    }
+    
+    .url-display {
+      font-size: 12px;
+      color: #6c757d;
+      word-break: break-all;
+      margin-bottom: 10px;
+    }
+    
+    .risk-factors {
+      margin-top: 10px;
+    }
+    
+    .risk-factor-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+    
+    .risk-factor-item:before {
+      content: "•";
+      margin-right: 5px;
+      color: #dc3545;
+    }
+    
+    .accuracy-meter {
+      margin-top: 15px;
+    }
+    
+    .accuracy-meter h3 {
+      font-size: 14px;
+      margin: 0 0 5px 0;
+    }
+    
+    .meter-container {
+      height: 8px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .meter-fill {
+      height: 100%;
+      background-color: #4285F4;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .meter-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #6c757d;
+      margin-top: 3px;
+    }
+    
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+    
+    button {
+      background-color: #4285F4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    button:hover {
+      background-color: #3367d6;
+    }
+    
+    button.secondary {
+      background-color: #f8f9fa;
+      color: #4285F4;
+      border: 1px solid #4285F4;
+    }
+    
+    button.secondary:hover {
+      background-color: #e9ecef;
+    }
+    
+    .footer {
+      padding: 10px 15px;
+      font-size: 11px;
+      color: #6c757d;
+      text-align: center;
+      border-top: 1px solid #dee2e6;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #6c757d;
+    }
+    
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #4285F4;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>PhishGuard AI</h1>
+  </div>
+  
+  <div class="content">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Analyzing website...</p>
+    </div>
+    
+    <div id="results" style="display: none;">
+      <div class="status-card">
+        <div class="status-indicator">
+          <div id="status-icon" class="status-icon status-unknown">?</div>
+          <div id="status-text" class="status-text">Unknown</div>
+        </div>
+        
+        <div id="url-display" class="url-display"></div>
+        
+        <div id="risk-factors" class="risk-factors" style="display: none;">
+          <h3>Risk Factors:</h3>
+          <div id="risk-factors-list"></div>
+        </div>
+      </div>
+      
+      <div class="accuracy-meter">
+        <h3>Detection Confidence</h3>
+        <div class="meter-container">
+          <div id="accuracy-meter-fill" class="meter-fill" style="width: 0%"></div>
+        </div>
+        <div class="meter-label">
+          <span>Low</span>
+          <span>High</span>
+        </div>
+      </div>
+      
+      <div class="actions">
+        <button id="details-btn">View Full Analysis</button>
+        <button id="report-btn" class="secondary">Report Issue</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    Powered by PhishGuard AI • v1.0.0
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

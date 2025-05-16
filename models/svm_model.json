@@ -1,0 +1,26 @@
+{
+  "modelType": "SVM",
+  "version": "1.0",
+  "weights": [
+    0.85,  /* domainLength */
+    0.92,  /* specialCharCount */
+    1.75,  /* hasIPAddress */
+    1.45,  /* suspiciousKeywords */
+    1.65,  /* hiddenIframes */
+    1.25,  /* passwordInputs */
+    1.35   /* obfuscatedJS */
+  ],
+  "bias": -0.75,
+  "features": [
+    "domainLength",
+    "specialCharCount",
+    "hasIPAddress",
+    "suspiciousKeywords",
+    "hiddenIframes",
+    "passwordInputs",
+    "obfuscatedJS"
+  ],
+  "accuracy": 0.92,
+  "trainingDate": "2023-12-15",
+  "trainingSize": 25000
+}

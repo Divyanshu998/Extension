@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard AI - Detailed Analysis</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #212529;
+      min-height: 100vh;
+    }
+    
+    .header {
+      background-color: #4285F4;
+      color: white;
+      padding: 15px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    
+    .content {
+      padding: 20px;
+    }
+    
+    .summary-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .status-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .status-safe {
+      background-color: #28a745;
+    }
+    
+    .status-suspicious {
+      background-color: #ffc107;
+      color: #212529;
+    }
+    
+    .status-dangerous {
+      background-color: #dc3545;
+    }
+    
+    .status-unknown {
+      background-color: #6c757d;
+    }
+    
+    .status-text {
+      font-weight: 500;
+      font-size: 18px;
+    }
+    
+    .url-display {
+      font-size: 14px;
+      color: #6c757d;
+      word-break: break-all;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .risk-factors {
+      margin-top: 15px;
+    }
+    
+    .risk-factor-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .risk-factor-item:before {
+      content: "•";
+      margin-right: 8px;
+      color: #dc3545;
+    }
+    
+    .analysis-section {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .analysis-section h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #4285F4;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .analysis-item {
+      margin-bottom: 15px;
+    }
+    
+    .analysis-item h3 {
+      margin: 0 0 5px 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .analysis-item p {
+      margin: 0;
+      font-size: 14px;
+      color: #6c757d;
+    }
+    
+    .meter-container {
+      height: 8px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 5px 0;
+    }
+    
+    .meter-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .meter-fill-safe {
+      background-color: #28a745;
+    }
+    
+    .meter-fill-suspicious {
+      background-color: #ffc107;
+    }
+    
+    .meter-fill-dangerous {
+      background-color: #dc3545;
+    }
+    
+    .meter-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #6c757d;
+    }
+    
+    .comparison-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+    
+    .comparison-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      margin: 0 5px;
+    }
+    
+    .comparison-item h3 {
+      margin: 0 0 5px 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .comparison-item p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    
+    .comparison-item.phishguard p {
+      color: #4285F4;
+    }
+    
+    .comparison-item.virustotal p {
+      color: #34a853;
+    }
+    
+    .feature-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    
+    .feature-table th,
+    .feature-table td {
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 13px;
+      border-bottom: 1px solid #dee2e6;
+    }
+    
+    .feature-table th {
+      font-weight: 500;
+      color: #495057;
+      background-color: #f8f9fa;
+    }
+    
+    .feature-value {
+      font-family: monospace;
+    }
+    
+    .feature-impact {
+      width: 80px;
+    }
+    
+    .impact-high {
+      color: #dc3545;
+    }
+    
+    .impact-medium {
+      color: #ffc107;
+    }
+    
+    .impact-low {
+      color: #28a745;
+    }
+    
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    
+    button {
+      background-color: #4285F4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    button:hover {
+      background-color: #3367d6;
+    }
+    
+    button.secondary {
+      background-color: #f8f9fa;
+      color: #4285F4;
+      border: 1px solid #4285F4;
+    }
+    
+    button.secondary:hover {
+      background-color: #e9ecef;
+    }
+    
+    .footer {
+      padding: 15px 20px;
+      font-size: 12px;
+      color: #6c757d;
+      text-align: center;
+      border-top: 1px solid #dee2e6;
+      margin-top: 20px;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6c757d;
+    }
+    
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #4285F4;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>PhishGuard AI - Detailed Analysis</h1>
+  </div>
+  
+  <div class="content">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading detailed analysis...</p>
+    </div>
+    
+    <div id="results" style="display: none;">
+      <div class="summary-card">
+        <div class="status-indicator">
+          <div id="status-icon" class="status-icon status-unknown">?</div>
+          <div id="status-text" class="status-text">Unknown</div>
+        </div>
+        
+        <div id="url-display" class="url-display"></div>
+        
+        <div id="risk-factors" class="risk-factors">
+          <h3>Risk Factors:</h3>
+          <div id="risk-factors-list"></div>
+        </div>
+      </div>
+      
+      <div class="analysis-section">
+        <h2>Detection Confidence</h2>
+        
+        <div class="comparison-section">
+          <div class="comparison-item phishguard">
+            <h3>PhishGuard AI</h3>
+            <p id="phishguard-score">--</p>
+          </div>
+          
+          <div class="comparison-item virustotal">
+            <h3>VirusTotal</h3>
+            <p id="virustotal-score">--</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="analysis-section">
+        <h2>URL Analysis</h2>
+        
+        <div class="analysis-item">
+          <h3>Domain Age</h3>
+          <p id="domain-age">Unknown</p>
+        </div>
+        
+        <div class="analysis-item">
+          <h3>SSL Certificate</h3>
+          <p id="ssl-status">Unknown</p>
+        </div>
+        
+        <div class="analysis-item">
+          <h3>Lexical Features</h3>
+          <table class="feature-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Value</th>
+                <th class="feature-impact">Impact</th>
+              </tr>
+            </thead>
+            <tbody id="lexical-features-table">
+              <!-- Filled by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="analysis-section">
+        <h2>Content Analysis</h2>
+        
+        <div class="analysis-item">
+          <h3>HTML Suspicious Elements</h3>
+          <table class="feature-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Value</th>
+                <th class="feature-impact">Impact</th>
+              </tr>
+            </thead>
+            <tbody id="html-features-table">
+              <!-- Filled by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="analysis-section">
+        <h2>AI Model Results</h2>
+        
+        <div class="analysis-item">
+          <h3>SVM Model (On-device)</h3>
+          <div class="meter-container">
+            <div id="svm-meter-fill" class="meter-fill" style="width: 0%"></div>
+          </div>
+          <div class="meter-label">
+            <span>0%</span>
+            <span id="svm-score">--</span>
+          </div>
+        </div>
+        
+        <div class="analysis-item">
+          <h3>DistilBERT NLP Model (Cloud)</h3>
+          <div class="meter-container">
+            <div id="cloud-meter-fill" class="meter-fill" style="width: 0%"></div>
+          </div>
+          <div class="meter-label">
+            <span>0%</span>
+            <span id="cloud-score">--</span>
+          </div>
+        </div>
+        
+        <div class="analysis-item">
+          <h3>Visual Recognition Model</h3>
+          <div class="meter-container">
+            <div id="visual-meter-fill" class="meter-fill" style="width: 0%"></div>
+          </div>
+          <div class="meter-label">
+            <span>0%</span>
+            <span id="visual-score">--</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="actions">
+        <button id="report-btn">Report False Detection</button>
+        <button id="close-btn" class="secondary">Close Panel</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    PhishGuard AI • v1.0.0 • Last updated: <span id="timestamp">--</span>
+  </div>
+  
+  <script src="sidepanel.js"></script>
+</body>
+</html>

